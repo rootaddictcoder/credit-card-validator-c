@@ -55,6 +55,10 @@ Visa
 Card is legit
 ```
 
+## Demo
+
+![Demo](demo.png)
+
 ## Concepts Practiced
 
 * Dynamic memory allocation
