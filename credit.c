@@ -20,14 +20,14 @@ int inputValidity(const char *n, int len)
     {
         if (!isdigit((unsigned char)n[i]))
         {
-            printf("Invalid Input. Try Again.");
+            printf("Invalid Input. Try Again.\n");
             return 0;
         }
     }
 
     if (len < 13 || len > 19)
     {
-        printf("Invalid Input. Try Again.");
+        printf("Invalid Input. Try Again.\n");
         return 0;
     }
 
@@ -177,67 +177,76 @@ void detectCardType(const char *cn, int len)
     }
 }
 
-int main(void)
+int runAgain()
 {
-    char *cn = calloc(30, sizeof(char));
-
-    if (cn == NULL)
+    char choice;
+    printf("Do you want to check another card? (y/n)  ");
+    scanf(" %c", &choice);
+    int c2;
+    while ((c2 = getchar()) != '\n' && c2 != EOF)
+        ;
+    if (choice == 'y' || choice == 'Y')
     {
-        printf("Memory allocation failed.\n");
         return 1;
     }
-
-    int len;
-
-    do
+    else if (choice == 'n' || choice == 'N')
     {
-        printf("Number: ");
-        scanf("%29s", cn);
-
-        len = strlen(cn);
-        
-        int cl;
-        while ((cl = getchar()) != '\n' && cl != EOF);
-
-    } while (!inputValidity(cn, len));
-
-    char *temp = realloc(cn, ((len * sizeof(char)) + 1));
-
-    if (temp != NULL)
-    {
-        cn = temp;
-    }
-
-    if (LuhnCheckStr(cn, len))
-    {
-        detectCardType(cn, len);
-        printf("Card number is valid. \n");
+        return 0;
     }
     else
     {
-        printf("Card is fake. \n");
+        printf("Invalid Input. Try again with the given choices. \n");
+        int r = runAgain();
+        return r;
     }
+}
 
-    free(cn);
-
-    while (1)
+int main(void)
+{
+    do
     {
-        char choice;
-        printf("Do you want to check another card? (y/n)  ");
-        scanf("%c", &choice);
-        if (choice == 'y' || choice == 'Y')
+        char *cn = calloc(30, sizeof(char));
+
+        if (cn == NULL)
         {
-            main();
+            printf("Memory allocation failed.\n");
+            return 1;
         }
-        else if (choice == 'n' || choice == 'N')
+
+        int len;
+
+        do
         {
-            return 0;
-            break;
+            printf("Enter card number (without spaces or hyphens): ");
+            scanf("%29s", cn);
+
+            len = strlen(cn);
+
+            int cl;
+            while ((cl = getchar()) != '\n' && cl != EOF)
+                ;
+
+        } while (!inputValidity(cn, len));
+
+        char *temp = realloc(cn, ((len * sizeof(char)) + 1));
+
+        if (temp != NULL)
+        {
+            cn = temp;
+        }
+
+        if (LuhnCheckStr(cn, len))
+        {
+            detectCardType(cn, len);
+            printf("Card number is valid. \n");
         }
         else
         {
-            printf("Invalid Input. Try again with the given choices. \n");
-        }  
-    }
+            printf("Card is fake. \n");
+        }
+
+        free(cn);
+    } while (runAgain());
     return 0;
 }
+
