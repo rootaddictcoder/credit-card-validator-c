@@ -211,7 +211,7 @@ int main(void)
     if (LuhnCheckStr(cn, len))
     {
         detectCardType(cn, len);
-        printf("Card is legit. \n");
+        printf("Card number is valid. \n");
     }
     else
     {
